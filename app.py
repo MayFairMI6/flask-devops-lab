@@ -1,8 +1,12 @@
 import json
 import os
+import platform
+import socket
+import time
 from flask import Flask, jsonify, render_template_string
 
 app = Flask(__name__)
+START_TIME = time.time()
 
 def load_config(path='config.json'):
     with open(path, 'r') as f:
@@ -15,6 +19,14 @@ def health():
 @app.get('/api/config')
 def config():
     return jsonify(load_config())
+
+@app.get('/api/report')
+def report():
+    return jsonify({
+        'hostname': socket.gethostname(),
+        'python_version': platform.python_version(),
+        'uptime_seconds': round(time.time() - START_TIME, 2)
+    })
 
 @app.get('/')
 def home():
