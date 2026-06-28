@@ -28,6 +28,14 @@ def report():
         'uptime_seconds': round(time.time() - START_TIME, 2)
     })
 
+@app.get('/api/version')
+def version():
+    cfg = load_config()
+    return jsonify({
+        'app_name': cfg['app_name'],
+        'version': cfg['version']
+    })
+
 @app.get('/')
 def home():
     cfg = load_config()
